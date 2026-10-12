@@ -1,0 +1,51 @@
+name: Construir APK del calendario
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar archivos
+        uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Extraer proyecto
+        run: |
+          unzip -q MiCalendarioMadrid2027_Proyecto_APK.zip -d /tmp/proyecto
+          cp -a /tmp/proyecto/MiCalendarioMadrid2027/. .
+
+      - name: Preparar Android
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar herramientas Android
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Preparar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Compilar aplicación
+        run: gradle --no-daemon assembleDebug
+
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiCalendarioMadrid2027-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
