@@ -32,7 +32,7 @@ jobs:
       - name: Preparar Android
         uses: android-actions/setup-android@v3
 
-      - - name: Instalar herramientas Android
+      -  name: Instalar herramientas Android
         run: yes | sdkmanager --licenses
       - name: Preparar Gradle
         uses: gradle/actions/setup-gradle@v4
