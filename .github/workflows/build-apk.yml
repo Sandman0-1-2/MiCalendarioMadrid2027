@@ -32,9 +32,8 @@ jobs:
       - name: Preparar Android
         uses: android-actions/setup-android@v3
 
-      - name: Instalar herramientas Android
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
-
+      - - name: Instalar herramientas Android
+        run: yes | sdkmanager --licenses
       - name: Preparar Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
